@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Dashboard | CampusScan</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body id="staffDashRoot">
+
+<nav class="navbar">
+  <a href="staff-dashboard.html" class="logo">CampusScan<span class="dot">.</span></a>
+  <div class="nav-links">
+    <a href="#" class="logout-btn">Logout</a>
+  </div>
+</nav>
+
+<div class="dash-wrapper">
+  <aside class="sidebar">
+    <div class="user-box">
+      <div class="name" id="sidebarName">—</div>
+      <div class="role" id="sidebarDept">—</div>
+    </div>
+    <nav>
+      <a href="staff-dashboard.html" class="active">📊 Dashboard</a>
+      <a href="index.html">🏠 Home</a>
+      <a href="#" class="logout-btn">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <h1 class="page-title">Staff Dashboard</h1>
+    <p class="page-subtitle">Review, prioritize, and resolve student complaints.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="totalCount">0</div>
+        <div class="stat-label">Total Complaints</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="pendingCount">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="progressCount">0</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="resolvedCount">0</div>
+        <div class="stat-label">Resolved</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="filters">
+        <select id="statusFilter">
+          <option value="all">All Statuses</option>
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Resolved">Resolved</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+        <select id="categoryFilter">
+          <option value="all">All Categories</option>
+          <option value="Infrastructure">Infrastructure</option>
+          <option value="Hostel">Hostel</option>
+          <option value="Academic">Academic</option>
+          <option value="Ragging">Ragging</option>
+          <option value="Harassment">Harassment</option>
+          <option value="Canteen">Canteen</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div id="emptyState" class="empty-state" style="display:none;">
+        <div class="icon">📭</div>
+        <p>No complaints match this filter.</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Title</th><th>Student</th><th>Category</th>
+            <th>Priority</th><th>Status</th><th>Filed On</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="complaintsBody"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Update Complaint Modal -->
+<div class="modal-overlay" id="updateModal">
+  <div class="modal-box">
+    <h3>Update Complaint</h3>
+    <form id="updateForm">
+      <input type="hidden" id="modalComplaintId">
+      <div class="form-group">
+        <label for="modalStatus">Status</label>
+        <select id="modalStatus">
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Resolved">Resolved</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="modalResponse">Response to Student</label>
+        <textarea id="modalResponse" rows="4" placeholder="Add a note or resolution details..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="closeUpdateModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

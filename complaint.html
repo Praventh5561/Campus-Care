@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File a Complaint | CampusScan</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="student-dashboard.html" class="logo">CampusScan<span class="dot">.</span></a>
+  <div class="nav-links">
+    <a href="student-dashboard.html">Dashboard</a>
+    <a href="status.html">My Complaints</a>
+    <a href="#" class="logout-btn">Logout</a>
+  </div>
+</nav>
+
+<div class="auth-wrapper">
+  <div class="auth-card complaint-form-card">
+    <h2>File a New Complaint</h2>
+    <p class="subtitle">Report a campus issue — it will be routed to the concerned staff</p>
+
+    <div id="complaintAlert" class="alert alert-error"></div>
+
+    <form id="complaintForm">
+      <div class="form-group">
+        <label for="title">Complaint Title</label>
+        <input type="text" id="title" placeholder="e.g. Broken washroom tap in Block C" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category" required>
+            <option value="Infrastructure">Infrastructure</option>
+            <option value="Hostel">Hostel</option>
+            <option value="Academic">Academic</option>
+            <option value="Ragging">Ragging</option>
+            <option value="Harassment">Harassment</option>
+            <option value="Canteen">Canteen</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="priority">Priority</label>
+          <select id="priority" required>
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="location">Location (optional)</label>
+        <input type="text" id="location" placeholder="e.g. Block C, 2nd Floor">
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" rows="5" placeholder="Describe the issue in detail..." required></textarea>
+      </div>
+
+      <div class="form-group" style="display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="is_anonymous" style="width:auto;">
+        <label for="is_anonymous" style="margin:0;">Submit anonymously (your name won't be shown to staff)</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Submit Complaint</button>
+    </form>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

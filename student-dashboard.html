@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard | CampusScan</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body id="studentDashRoot">
+
+<nav class="navbar">
+  <a href="student-dashboard.html" class="logo">CampusScan<span class="dot">.</span></a>
+  <div class="nav-links">
+    <a href="complaint.html">File Complaint</a>
+    <a href="status.html">My Complaints</a>
+    <a href="#" class="logout-btn">Logout</a>
+  </div>
+</nav>
+
+<div class="dash-wrapper">
+  <aside class="sidebar">
+    <div class="user-box">
+      <div class="name" id="sidebarName">—</div>
+      <div class="role" id="sidebarDept">—</div>
+    </div>
+    <nav>
+      <a href="student-dashboard.html" class="active">📊 Dashboard</a>
+      <a href="complaint.html">📝 File Complaint</a>
+      <a href="status.html">📋 My Complaints</a>
+      <a href="index.html">🏠 Home</a>
+      <a href="#" class="logout-btn">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <h1 class="page-title">Welcome, <span id="welcomeName">Student</span> 👋</h1>
+    <p class="page-subtitle">Here's a summary of your complaint activity on CampusScan.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="totalCount">0</div>
+        <div class="stat-label">Total Complaints</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="pendingCount">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="progressCount">0</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="resolvedCount">0</div>
+        <div class="stat-label">Resolved</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3>Recent Complaints</h3>
+        <a href="complaint.html" class="btn btn-primary">+ New Complaint</a>
+      </div>
+      <div id="emptyState" class="empty-state" style="display:none;">
+        <div class="icon">📭</div>
+        <p>You haven't filed any complaints yet.</p>
+      </div>
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Title</th><th>Category</th><th>Status</th><th>Filed On</th></tr>
+        </thead>
+        <tbody id="recentComplaintsBody"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
