@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
 from backend.db import get_db
+from backend.security import hash_password, verify_password, generate_session_token
 
 router = APIRouter(prefix="/api/staff", tags=["Staff Authentication & Management"])
 
@@ -20,15 +21,18 @@ def login_staff(credentials: StaffLogin):
     row = cursor.fetchone()
     conn.close()
 
-    if not row or row["password"] != credentials.password:
+    if not row or not verify_password(credentials.password, row["password"]):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid Staff ID or Password."
         )
 
+    token = generate_session_token(row["id"], row["role"])
+
     return {
         "success": True,
         "message": "Staff login successful!",
+        "token": token,
         "user": {
             "id": row["id"],
             "staff_id": row["staff_id"],

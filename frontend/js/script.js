@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CampusCare22 - Frontend Logic & API Integration with Image Upload Support
+   CampusCare22 - Frontend Logic with PBKDF2 Token Authentication & File Uploads
    ========================================================================== */
 
 const API_BASE = "http://127.0.0.1:8000/api";
@@ -9,12 +9,18 @@ function getCurrentUser() {
     return userStr ? JSON.parse(userStr) : null;
 }
 
-function setCurrentUser(user) {
+function getAuthToken() {
+    return localStorage.getItem("campusCare22Token") || "";
+}
+
+function setCurrentSession(user, token) {
     localStorage.setItem("campusCare22User", JSON.stringify(user));
+    if (token) localStorage.setItem("campusCare22Token", token);
 }
 
 function logout() {
     localStorage.removeItem("campusCare22User");
+    localStorage.removeItem("campusCare22Token");
     window.location.href = "index.html";
 }
 
@@ -103,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
-                    setCurrentUser(data.user);
+                    setCurrentSession(data.user, data.token);
                     window.location.href = "student-dashboard.html";
                 } else {
                     showAlert("loginAlert", data.detail || "Login failed.", "error");
@@ -133,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
-                    setCurrentUser(data.user);
+                    setCurrentSession(data.user, data.token);
                     alert("Registration successful! Redirecting to Dashboard...");
                     window.location.href = "student-dashboard.html";
                 } else {
@@ -160,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
-                    setCurrentUser(data.user);
+                    setCurrentSession(data.user, data.token);
                     window.location.href = "staff-dashboard.html";
                 } else {
                     showAlert("staffAlert", data.detail || "Invalid Staff Credentials.", "error");
@@ -171,7 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Complaint Form Submission with FormData & File Attachment
     const complaintForm = document.getElementById("complaintForm");
     if (complaintForm) {
         const studentUser = checkAuth("student");
@@ -201,6 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const res = await fetch(`${API_BASE}/complaints/submit`, {
                     method: "POST",
+                    headers: { "Authorization": `Bearer ${getAuthToken()}` },
                     body: formData
                 });
                 const data = await res.json();
@@ -247,7 +253,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadStudentDashboard(studentId) {
     try {
-        const res = await fetch(`${API_BASE}/complaints/student/${studentId}`);
+        const res = await fetch(`${API_BASE}/complaints/student/${studentId}`, {
+            headers: { "Authorization": `Bearer ${getAuthToken()}` }
+        });
         const data = await res.json();
         const complaints = data.complaints || [];
 
@@ -310,7 +318,9 @@ async function fetchStaffComplaints() {
     });
 
     try {
-        const res = await fetch(`${API_BASE}/complaints/all?${queryParams}`);
+        const res = await fetch(`${API_BASE}/complaints/all?${queryParams}`, {
+            headers: { "Authorization": `Bearer ${getAuthToken()}` }
+        });
         const data = await res.json();
         const complaints = data.complaints || [];
 
@@ -376,7 +386,6 @@ async function fetchTicketDetails(ticketId) {
         document.getElementById("ticketAssigned").innerText = c.assigned_staff || "Awaiting Staff Assignment";
         document.getElementById("ticketRemarks").innerText = c.staff_remarks || "No remarks added yet.";
 
-        // Display Photo Preview if present
         const imgContainer = document.getElementById("ticketImagePreview");
         if (imgContainer) {
             if (c.image_path) {
@@ -450,7 +459,10 @@ async function submitStatusUpdate() {
     try {
         const res = await fetch(`${API_BASE}/complaints/update-status`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${getAuthToken()}`
+            },
             body: JSON.stringify(payload)
         });
         const data = await res.json();
