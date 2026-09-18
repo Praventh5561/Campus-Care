@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 from backend.db import get_db, generate_ticket_id
+from backend.notifications import send_complaint_confirmation, send_status_update_notification
 
 router = APIRouter(prefix="/api/complaints", tags=["Complaint Operations"])
 
@@ -63,8 +64,16 @@ async def submit_complaint(
         VALUES (?, NULL, 'Submitted', 'Student', ?, 'Complaint submitted with issue details.')
     """, (complaint_id, student_name))
 
+    # Fetch student email for confirmation notification
+    cursor.execute("SELECT email FROM students WHERE id = ?", (student_id,))
+    student_row = cursor.fetchone()
+    student_email = student_row["email"] if student_row else f"{roll_number.lower()}@college.edu"
+
     conn.commit()
     conn.close()
+
+    # Trigger Automated Confirmation Notification
+    send_complaint_confirmation(student_email, student_name, ticket_id, title)
 
     return {
         "success": True,
@@ -150,7 +159,12 @@ def update_complaint_status(update_data: StatusUpdate):
     conn = get_db()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT id, status, assigned_staff FROM complaints WHERE ticket_id = ?", (update_data.ticket_id,))
+    cursor.execute("""
+        SELECT c.id, c.status, c.assigned_staff, c.student_id, c.student_name, s.email as student_email
+        FROM complaints c
+        LEFT JOIN students s ON c.student_id = s.id
+        WHERE c.ticket_id = ?
+    """, (update_data.ticket_id,))
     row = cursor.fetchone()
 
     if not row:
@@ -162,6 +176,8 @@ def update_complaint_status(update_data: StatusUpdate):
     new_status = update_data.status
     assigned_staff = update_data.assigned_staff or row["assigned_staff"]
     remarks = update_data.remarks or ""
+    student_name = row["student_name"]
+    student_email = row["student_email"] or "student@college.edu"
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     cursor.execute("""
@@ -178,6 +194,16 @@ def update_complaint_status(update_data: StatusUpdate):
 
     conn.commit()
     conn.close()
+
+    # Trigger Automated Email Notification on Status Update
+    send_status_update_notification(
+        student_email=student_email,
+        student_name=student_name,
+        ticket_id=update_data.ticket_id,
+        new_status=new_status,
+        remarks=remarks,
+        updated_by=f"{update_data.staff_name} ({update_data.staff_role})"
+    )
 
     return {
         "success": True,
