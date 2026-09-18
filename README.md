@@ -3,11 +3,12 @@
   <h1>🎓 CAMPUSCARE22</h1>
   <p><strong>College Grievance & Maintenance Issue Tracking System</strong></p>
 
-  <!-- Quick GitHub Badges (Shields.io) -->
+  <!-- GitHub Badges (Shields.io) -->
   <p>
     <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python Version" /></a>
     <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/FastAPI-0.100%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" /></a>
     <a href="https://sqlite.org"><img src="https://img.shields.io/badge/SQLite-Embedded%20DB-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" /></a>
+    <a href="https://github.com/Praventh5561/Campus-Care"><img src="https://img.shields.io/badge/YOLO-Badge%20🤠-ff69b4?style=for-the-badge&logo=github" alt="YOLO Mode" /></a>
     <a href="https://github.com/Praventh5561/Campus-Care/pulls"><img src="https://img.shields.io/badge/PRs-Welcome-brightgreen.svg?style=for-the-badge" alt="PRs Welcome" /></a>
     <a href="https://github.com/Praventh5561/Campus-Care/stargazers"><img src="https://img.shields.io/badge/⭐%20Stars-Appreciate-yellow?style=for-the-badge" alt="Stars" /></a>
   </p>
