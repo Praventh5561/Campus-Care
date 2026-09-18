@@ -3,7 +3,8 @@ import os
 import random
 from datetime import datetime
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "campus_care22.db")
+DB_PATH = "/tmp/campus_care22.db" if os.environ.get("VERCEL") else os.path.join(os.path.dirname(__file__), "campus_care22.db")
+
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
