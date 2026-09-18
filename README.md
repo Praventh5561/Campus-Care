@@ -1,121 +1,76 @@
-# CampusScan 🛡️
-### College Complaint Management System
+# 🎓 CAMPUSCARE22 - College Grievance & Issue Management System
 
-CampusScan is a full-stack web application that lets **students** report campus issues
-(infrastructure, hostel, academic, harassment, ragging, canteen, etc.) and lets **staff**
-track, prioritize, and resolve them — all through separate, role-based login portals.
+**CAMPUSCARE22** is a modern, full-stack college complaint and issue tracking web application built with a Python FastAPI backend, SQLite/MySQL database, and a glassmorphism web interface.
 
 ---
 
-## ✨ Features
-
-- Separate **Student Login/Register** and **Staff Login** portals (JWT-secured)
-- Students can file complaints with category, priority, location, and optional anonymity
-- Real-time complaint status tracking: `Pending → In Progress → Resolved / Rejected`
-- Staff dashboard with live stats, filters (status/category), and inline status updates
-- Staff can respond directly to each complaint; response is visible to the student
-- Passwords hashed with **bcrypt**; sessions secured with **JWT**
-- Clean, responsive UI — no framework dependency on the frontend (pure HTML/CSS/JS)
-
----
-
-## 🗂️ Project Structure
+## 📁 Project Structure
 
 ```
-CampusScan/
+CAMPUSCARE22/
+├── frontend/
+│   ├── index.html               # Main Landing Page with hero section & ticket lookup
+│   ├── student-login.html       # Student Sign In & Registration portal
+│   ├── staff-login.html         # Staff & Admin Login portal
+│   ├── student-dashboard.html   # Student personal complaint dashboard
+│   ├── staff-dashboard.html     # Staff control center to filter, update & assign tickets
+│   ├── complaint.html           # File a new complaint form
+│   ├── status.html              # Track complaint lifecycle timeline
+│   ├── css/
+│   │   └── style.css            # Modern glassmorphism CSS design system
+│   └── js/
+│       └── script.js            # Client API logic, session handler & modal controls
 │
-├── frontend/                  # Static client (HTML/CSS/JS)
-│   ├── index.html             # Landing page
-│   ├── student-login.html     # Student login + registration
-│   ├── staff-login.html       # Staff login
-│   ├── student-dashboard.html # Student overview & recent complaints
-│   ├── staff-dashboard.html   # Staff overview, filters & complaint management
-│   ├── complaint.html         # File a new complaint
-│   ├── status.html            # Track my complaints
-│   ├── css/style.css
-│   └── js/script.js
-│
-├── backend/                   # Node.js + Express API
-│   ├── server.js
-│   ├── db.js
-│   ├── middleware/auth.js     # JWT verification
+├── backend/
+│   ├── server.py                # Main FastAPI server with CORS & router mount
+│   ├── db.py                    # Database connection, table creation & seed data
 │   └── routes/
-│       ├── student.js         # /api/student/*
-│       ├── staff.js           # /api/staff/*
-│       └── complaint.js       # /api/complaint/*
+│       ├── student.py           # Student auth endpoints (register/login)
+│       ├── staff.py             # Staff auth & employee management endpoints
+│       └── complaint.py         # Complaint CRUD, filter, status & timeline updates
 │
 ├── database/
-│   └── campus_scan.sql        # MySQL schema + seed data
+│   └── campus_care22.sql        # MySQL database DDL schema and seed data
 │
-├── package.json
-└── .env.example
+├── generate_ppt.py              # Python script to generate PowerPoint presentation (.pptx)
+├── requirements.txt             # Python dependencies
+└── README.md                    # Project Documentation
 ```
 
 ---
 
-## ⚙️ Tech Stack
+## 🚀 How to Run CAMPUSCARE22
 
-| Layer      | Technology                          |
-|------------|--------------------------------------|
-| Frontend   | HTML5, CSS3, Vanilla JavaScript      |
-| Backend    | Node.js, Express.js                  |
-| Database   | MySQL                                |
-| Auth       | JWT (jsonwebtoken) + bcrypt          |
+### 1. Install Dependencies
+Open terminal in `CAMPUSCARE22`:
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Generate PowerPoint Presentation (.pptx)
+Run the presentation generator script:
+```bash
+python generate_ppt.py
+```
+This produces `CampusCare22_Presentation.pptx`.
+
+### 3. Start Python Backend & Web Server
+Run the FastAPI server:
+```bash
+python -m uvicorn backend.server:app --reload --port 8000
+```
+- **API URL**: `http://127.0.0.1:8000`
+- **Swagger Docs**: `http://127.0.0.1:8000/docs`
 
 ---
 
-## 🚀 Setup Instructions
+## 🔑 Demo Login Credentials
 
-### 1. Install dependencies
-```bash
-npm install
-```
+### Student Credentials:
+- **Roll Number**: `21CS045`
+- **Password**: `student123`
 
-### 2. Set up the database
-- Create the schema by running the SQL file in MySQL:
-```bash
-mysql -u root -p < database/campus_scan.sql
-```
-This creates the `campus_scan` database, its tables, and two demo accounts:
-
-| Role    | Email                      | Password     |
-|---------|-----------------------------|--------------|
-| Student | arun.student@campus.edu     | password123  |
-| Staff   | ramesh.staff@campus.edu     | password123  |
-
-### 3. Configure environment variables
-Copy `.env.example` to `.env` and fill in your MySQL credentials:
-```bash
-cp .env.example .env
-```
-
-### 4. Run the server
-```bash
-npm start
-```
-The app will be available at **http://localhost:5000**
-
----
-
-## 🔌 API Overview
-
-| Method | Endpoint                     | Access   | Description                     |
-|--------|-------------------------------|----------|----------------------------------|
-| POST   | /api/student/register         | Public   | Register a new student           |
-| POST   | /api/student/login            | Public   | Student login                    |
-| GET    | /api/student/profile          | Student  | Get logged-in student profile    |
-| POST   | /api/staff/login              | Public   | Staff login                      |
-| GET    | /api/staff/stats              | Staff    | Dashboard summary counts         |
-| POST   | /api/complaint/add            | Student  | File a new complaint             |
-| GET    | /api/complaint/my             | Student  | List my complaints               |
-| GET    | /api/complaint/all            | Staff    | List all complaints (filterable) |
-| PUT    | /api/complaint/update/:id     | Staff    | Update status / add response     |
-| GET    | /api/complaint/:id             | Both     | Get a single complaint           |
-
----
-
-## 🎓 Academic Note
-
-This project was built as a college mini-project demonstrating a role-based grievance/
-complaint management system, covering authentication, CRUD operations, and a
-student–staff workflow end to end.
+### Staff Credentials:
+- **Maintenance HOD**: Staff ID `STF101` | Password `staff123`
+- **IT Specialist**: Staff ID `STF102` | Password `staff123`
+- **Campus Admin**: Staff ID `ADM001` | Password `admin123`

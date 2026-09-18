@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Control Center - CampusCare22</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="brand">
+            <div class="brand-icon">⚙️</div>
+            <span>Campus<span style="color: var(--accent-cyan);">Care22 Staff</span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="staff-dashboard.html" class="nav-link active">Control Panel</a></li>
+            <li><a href="status.html" class="nav-link">Search Ticket</a></li>
+        </ul>
+        <div id="userNavInfo"></div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div style="margin-bottom: 2rem;">
+            <h2>Staff & Administrative Control Center</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Review campus issues, assign departmental staff, update progress steps, and resolve complaints.</p>
+        </div>
+
+        <!-- System Overview Metrics -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-icon total">📊</div>
+                <div class="stat-info">
+                    <h4 id="totalCount">0</h4>
+                    <p>Total Complaints</p>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon pending">⏳</div>
+                <div class="stat-info">
+                    <h4 id="pendingCount">0</h4>
+                    <p>Submitted (Unassigned)</p>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon progress">🔧</div>
+                <div class="stat-info">
+                    <h4 id="progressCount">0</h4>
+                    <p>Under Review / In Progress</p>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon resolved">🎉</div>
+                <div class="stat-info">
+                    <h4 id="resolvedCount">0</h4>
+                    <p>Resolved</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bar & Search -->
+        <div class="glass-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: end;">
+                <div>
+                    <label class="form-label">Search Ticket / Location / Student</label>
+                    <input type="text" id="staffSearchInput" class="form-control" placeholder="Search query..." onkeyup="fetchStaffComplaints()">
+                </div>
+                <div>
+                    <label class="form-label">Filter by Status</label>
+                    <select id="statusFilter" class="form-control" onchange="fetchStaffComplaints()">
+                        <option value="All">All Statuses</option>
+                        <option value="Submitted">Submitted</option>
+                        <option value="Under Review">Under Review</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Filter by Category</label>
+                    <select id="categoryFilter" class="form-control" onchange="fetchStaffComplaints()">
+                        <option value="All">All Categories</option>
+                        <option value="Hostel & Accommodation">Hostel & Accommodation</option>
+                        <option value="Infrastructure & Furniture">Infrastructure & Furniture</option>
+                        <option value="Wi-Fi & IT Services">Wi-Fi & IT Services</option>
+                        <option value="Academics & Library">Academics & Library</option>
+                        <option value="Electrical & AC">Electrical & AC</option>
+                        <option value="Sanitation & Hygiene">Sanitation & Hygiene</option>
+                        <option value="Canteen & Food Quality">Canteen & Food Quality</option>
+                    </select>
+                </div>
+                <div>
+                    <button onclick="fetchStaffComplaints()" class="btn btn-secondary" style="width: 100%;">🔄 Refresh List</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complaints Table -->
+        <div class="glass-card">
+            <h3 style="margin-bottom: 1rem;">Campus Complaints Master List</h3>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Student</th>
+                            <th>Title / Issue</th>
+                            <th>Category & Location</th>
+                            <th>Urgency</th>
+                            <th>Status</th>
+                            <th>Assigned Staff</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staffComplaintsTable">
+                        <!-- Loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPDATE STATUS MODAL -->
+    <div id="statusModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 0.5rem;">Update Complaint Lifecycle</h3>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+                Ticket ID: <strong id="modalTicketId" style="color: var(--primary);">CC22-2026-XXXX</strong>
+            </p>
+
+            <div class="form-group">
+                <label class="form-label">Update Status Step</label>
+                <select id="updateStatusSelect" class="form-control">
+                    <option value="Under Review">Under Review (Inspect)</option>
+                    <option value="In Progress">In Progress (Work Assigned)</option>
+                    <option value="Resolved">Resolved (Completed)</option>
+                    <option value="Rejected">Rejected / Invalid</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Assign Staff / Engineer</label>
+                <input type="text" id="updateStaffInput" class="form-control" placeholder="e.g. Technician Ramesh / Self">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Staff Remarks & Resolution Note</label>
+                <textarea id="updateRemarks" class="form-control" rows="3" placeholder="Describe actions taken or reason for status update..."></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+                <button onclick="closeModal()" class="btn btn-secondary">Cancel</button>
+                <button onclick="submitStatusUpdate()" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

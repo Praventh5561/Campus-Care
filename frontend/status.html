@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Ticket Status - CampusCare22</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="brand">
+            <div class="brand-icon">🏥</div>
+            <span>Campus<span style="color: var(--primary);">Care22</span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="status.html" class="nav-link active">Track Status</a></li>
+            <li><a href="student-login.html" class="nav-link">Student Portal</a></li>
+            <li><a href="staff-login.html" class="nav-link">Staff Portal</a></li>
+        </ul>
+        <div id="userNavInfo"></div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container" style="max-width: 900px;">
+        <div class="glass-card" id="statusSearchContainer" style="margin-bottom: 2rem;">
+            <h2 style="margin-bottom: 0.5rem;">Track Complaint Lifecycle</h2>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem;">Enter your Ticket ID (e.g., <code>CC22-2026-8941</code>) to view current resolution state and staff inspection notes.</p>
+            
+            <div style="display: flex; gap: 0.75rem;">
+                <input type="text" id="ticketSearchInput" class="form-control" placeholder="Enter Ticket ID...">
+                <button id="ticketSearchBtn" class="btn btn-primary">Search Ticket</button>
+            </div>
+            
+            <div id="searchAlert" class="alert alert-error" style="margin-top: 1rem; display: none;"></div>
+        </div>
+
+        <!-- Ticket Result Card -->
+        <div id="ticketResultContainer" class="glass-card" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-glass-light); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <h3 id="ticketHeading" style="color: var(--primary);">Ticket CC22-2026-XXXX</h3>
+                    <h2 id="ticketTitle" style="margin-top: 0.25rem;">Issue Title Here</h2>
+                </div>
+                <div style="text-align: right;">
+                    <div id="ticketStatus"></div>
+                    <div id="ticketUrgency" style="margin-top: 0.5rem;"></div>
+                </div>
+            </div>
+
+            <div class="grid-3" style="margin-bottom: 1.5rem;">
+                <div>
+                    <small style="color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Category</small>
+                    <p id="ticketCategory" style="font-weight: 600; color: #ffffff;"></p>
+                </div>
+                <div>
+                    <small style="color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Location</small>
+                    <p id="ticketLocation" style="font-weight: 600; color: #ffffff;"></p>
+                </div>
+                <div>
+                    <small style="color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Submitted By</small>
+                    <p id="ticketStudent" style="font-weight: 600; color: #ffffff;"></p>
+                </div>
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1.2rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); margin-bottom: 1.5rem;">
+                <small style="color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Description</small>
+                <p id="ticketDesc" style="color: var(--text-main); margin-top: 0.3rem;"></p>
+            </div>
+
+            <div style="display: flex; gap: 2rem; margin-bottom: 2rem; font-size: 0.9rem;">
+                <div>
+                    <span style="color: var(--text-muted);">Assigned Staff:</span> <strong id="ticketAssigned" style="color: var(--accent-cyan);"></strong>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted);">Latest Remarks:</span> <strong id="ticketRemarks" style="color: #f1f5f9;"></strong>
+                </div>
+            </div>
+
+            <!-- Audit Trail Timeline -->
+            <h4 style="border-top: 1px solid var(--border-glass-light); padding-top: 1.5rem; margin-bottom: 1rem;">Resolution Progress Timeline</h4>
+            <div id="ticketTimeline" class="timeline">
+                <!-- Timeline items loaded dynamically -->
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 CampusCare22 - Status Tracking</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login - CampusCare22</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="brand">
+            <div class="brand-icon">🏥</div>
+            <span>Campus<span style="color: var(--primary);">Care22</span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="status.html" class="nav-link">Track Status</a></li>
+            <li><a href="student-login.html" class="nav-link active">Student Portal</a></li>
+            <li><a href="staff-login.html" class="nav-link">Staff Portal</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="login-wrapper">
+            <div class="glass-card">
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-glass-light); padding-bottom: 0.75rem;">
+                    <button id="showLoginBtn" onclick="toggleAuthTab('login')" class="btn btn-outline btn-sm" style="flex:1;">Student Sign In</button>
+                    <button id="showRegBtn" onclick="toggleAuthTab('register')" class="btn btn-secondary btn-sm" style="flex:1;">New Registration</button>
+                </div>
+
+                <div id="loginAlert" class="alert"></div>
+                <div id="regAlert" class="alert"></div>
+
+                <!-- LOGIN FORM -->
+                <form id="studentLoginForm">
+                    <h2 style="margin-bottom: 0.5rem;">Student Sign In</h2>
+                    <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem;">Access CampusCare22 student portal to manage your grievances.</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Roll Number</label>
+                        <input type="text" id="roll_number" class="form-control" placeholder="e.g. 21CS045" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Sign In to Portal</button>
+
+                    <div style="margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-dim); text-align: center;">
+                        Demo Credentials: Roll Number: <strong>21CS045</strong> | Password: <strong>student123</strong>
+                    </div>
+                </form>
+
+                <!-- REGISTER FORM -->
+                <form id="studentRegisterForm" style="display: none;">
+                    <h2 style="margin-bottom: 0.5rem;">Student Registration</h2>
+                    <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem;">Register a new student profile on CampusCare22.</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Roll Number</label>
+                        <input type="text" id="reg_roll" class="form-control" placeholder="e.g. 22EC012" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="reg_name" class="form-control" placeholder="e.g. Sneha R" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">College Email</label>
+                        <input type="email" id="reg_email" class="form-control" placeholder="student@college.edu" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Department</label>
+                        <select id="reg_dept" class="form-control" required>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Electronics & Comm">Electronics & Comm</option>
+                            <option value="Electrical & Electronics">Electrical & Electronics</option>
+                            <option value="Mechanical Engg">Mechanical Engg</option>
+                            <option value="Civil Engg">Civil Engg</option>
+                            <option value="Information Tech">Information Tech</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Year of Study</label>
+                        <select id="reg_year" class="form-control" required>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="reg_pass" class="form-control" placeholder="Choose password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Create Account</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        function toggleAuthTab(tab) {
+            const loginForm = document.getElementById("studentLoginForm");
+            const regForm = document.getElementById("studentRegisterForm");
+            const loginBtn = document.getElementById("showLoginBtn");
+            const regBtn = document.getElementById("showRegBtn");
+
+            if (tab === 'login') {
+                loginForm.style.display = "block";
+                regForm.style.display = "none";
+                loginBtn.className = "btn btn-primary btn-sm";
+                regBtn.className = "btn btn-secondary btn-sm";
+            } else {
+                loginForm.style.display = "none";
+                regForm.style.display = "block";
+                loginBtn.className = "btn btn-secondary btn-sm";
+                regBtn.className = "btn btn-primary btn-sm";
+            }
+        }
+    </script>
+</body>
+</html>

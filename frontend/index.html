@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusCare22 - College Grievance & Issue Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="brand">
+            <div class="brand-icon">🏥</div>
+            <span>Campus<span style="color: var(--primary);">Care22</span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link active">Home</a></li>
+            <li><a href="status.html" class="nav-link">Track Status</a></li>
+            <li><a href="student-login.html" class="nav-link">Student Portal</a></li>
+            <li><a href="staff-login.html" class="nav-link">Staff Portal</a></li>
+        </ul>
+        <div id="userNavInfo">
+            <a href="student-login.html" class="btn btn-primary btn-sm">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div>
+                <h1 class="hero-title">Welcome to <span>CampusCare22</span> Portal</h1>
+                <p class="hero-subtitle">Streamlined complaint management for students and college staff. Lodge grievances, monitor progress, and track real-time resolution timeline.</p>
+                <div class="hero-buttons">
+                    <a href="student-login.html" class="btn btn-primary">⚡ File a Complaint</a>
+                    <a href="status.html" class="btn btn-secondary">🔍 Track Ticket Status</a>
+                </div>
+            </div>
+            <div class="glass-card" style="border-color: rgba(99, 102, 241, 0.3);">
+                <h3 style="margin-bottom: 1rem; color: #ffffff;">Quick Status Lookup</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">Enter your unique complaint ticket number to view live progress.</p>
+                <div style="display: flex; gap: 0.75rem;">
+                    <input type="text" id="heroTicketInput" class="form-control" placeholder="e.g. CC22-2026-8941">
+                    <button onclick="window.location.href='status.html?ticket=' + document.getElementById('heroTicketInput').value.trim()" class="btn btn-primary">Check</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Cards -->
+        <h2 style="text-align: center; margin: 3rem 0 1.5rem 0;">CampusCare22 Modules</h2>
+        <div class="grid-3">
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Student Portal</h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 0.5rem;">Lodge maintenance, electrical, IT, or hostel issues with auto-generated Ticket IDs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <h3>Staff Control Center</h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 0.5rem;">Filter complaints by urgency, assign technicians, and update status step-by-step.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Resolution Audit Trail</h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 0.5rem;">Complete lifecycle transparency from submission -> inspection -> progress -> final resolution.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 CampusCare22 - College Complaint Management Platform</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
