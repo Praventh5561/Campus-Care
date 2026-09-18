@@ -2,7 +2,9 @@
    CampusCare22 - Real-Time Dashboard, AI Routing & PBKDF2 Auth Client
    ========================================================================== */
 
-const API_BASE = "http://127.0.0.1:8000/api";
+const API_BASE = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+    ? "http://127.0.0.1:8000/api"
+    : `${window.location.origin}/api`;
 
 function getCurrentUser() {
     const userStr = localStorage.getItem("campusCare22User");
