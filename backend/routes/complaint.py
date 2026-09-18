@@ -6,6 +6,7 @@ from typing import Optional
 from datetime import datetime
 from backend.db import get_db, generate_ticket_id
 from backend.notifications import send_complaint_confirmation, send_status_update_notification
+from backend.ai_engine import analyze_complaint_text
 
 router = APIRouter(prefix="/api/complaints", tags=["Complaint Operations"])
 
@@ -39,6 +40,11 @@ async def submit_complaint(
     ticket_id = generate_ticket_id()
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    # Smart AI Analysis & Urgency Escalation
+    ai_result = analyze_complaint_text(title, description, urgency, category)
+    final_urgency = ai_result["urgency"]
+    auto_assigned_staff = ai_result["suggested_staff"]
+
     image_path_str = ""
     if image and image.filename:
         file_extension = os.path.splitext(image.filename)[1]
@@ -52,19 +58,23 @@ async def submit_complaint(
 
     cursor.execute("""
         INSERT INTO complaints 
-        (ticket_id, student_id, student_name, roll_number, title, category, location, urgency, description, image_path, status, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Submitted', ?, ?)
+        (ticket_id, student_id, student_name, roll_number, title, category, location, urgency, description, image_path, status, assigned_staff, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Submitted', ?, ?, ?)
     """, (ticket_id, student_id, student_name, roll_number, title, 
-          category, location, urgency, description, image_path_str, now, now))
+          category, location, final_urgency, description, image_path_str, auto_assigned_staff, now, now))
     
     complaint_id = cursor.lastrowid
 
+    # Record initial audit entry
+    initial_comment = f"Complaint submitted. Auto-routed to {auto_assigned_staff}."
+    if ai_result["ai_flags"]["urgency_escalated"]:
+        initial_comment += f" [AI Escalated Urgency to {final_urgency}]"
+
     cursor.execute("""
         INSERT INTO complaint_history (complaint_id, status_from, status_to, updated_by_role, updated_by_name, comments)
-        VALUES (?, NULL, 'Submitted', 'Student', ?, 'Complaint submitted with issue details.')
-    """, (complaint_id, student_name))
+        VALUES (?, NULL, 'Submitted', 'System AI', 'CampusCare AI', ?)
+    """, (complaint_id, initial_comment))
 
-    # Fetch student email for confirmation notification
     cursor.execute("SELECT email FROM students WHERE id = ?", (student_id,))
     student_row = cursor.fetchone()
     student_email = student_row["email"] if student_row else f"{roll_number.lower()}@college.edu"
@@ -72,13 +82,14 @@ async def submit_complaint(
     conn.commit()
     conn.close()
 
-    # Trigger Automated Confirmation Notification
     send_complaint_confirmation(student_email, student_name, ticket_id, title)
 
     return {
         "success": True,
         "message": "Complaint submitted successfully!",
         "ticket_id": ticket_id,
+        "urgency": final_urgency,
+        "assigned_staff": auto_assigned_staff,
         "image_path": image_path_str
     }
 
@@ -195,7 +206,6 @@ def update_complaint_status(update_data: StatusUpdate):
     conn.commit()
     conn.close()
 
-    # Trigger Automated Email Notification on Status Update
     send_status_update_notification(
         student_email=student_email,
         student_name=student_name,
