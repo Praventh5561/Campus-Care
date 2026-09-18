@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException, Query
+import os
+import shutil
+from fastapi import APIRouter, HTTPException, Query, Form, File, UploadFile
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
@@ -6,15 +8,9 @@ from backend.db import get_db, generate_ticket_id
 
 router = APIRouter(prefix="/api/complaints", tags=["Complaint Operations"])
 
-class ComplaintCreate(BaseModel):
-    student_id: int
-    student_name: str
-    roll_number: str
-    title: str
-    category: str
-    location: str
-    urgency: str
-    description: str
+# Upload directory
+UPLOAD_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "uploads"))
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 class StatusUpdate(BaseModel):
     ticket_id: str
@@ -25,26 +21,47 @@ class StatusUpdate(BaseModel):
     remarks: Optional[str] = ""
 
 @router.post("/submit")
-def submit_complaint(complaint: ComplaintCreate):
+async def submit_complaint(
+    student_id: int = Form(...),
+    student_name: str = Form(...),
+    roll_number: str = Form(...),
+    title: str = Form(...),
+    category: str = Form(...),
+    location: str = Form(...),
+    urgency: str = Form(...),
+    description: str = Form(...),
+    image: Optional[UploadFile] = File(None)
+):
     conn = get_db()
     cursor = conn.cursor()
 
     ticket_id = generate_ticket_id()
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    image_path_str = ""
+    if image and image.filename:
+        file_extension = os.path.splitext(image.filename)[1]
+        saved_filename = f"{ticket_id}_{int(datetime.now().timestamp())}{file_extension}"
+        destination = os.path.join(UPLOAD_DIR, saved_filename)
+        
+        with open(destination, "wb") as buffer:
+            shutil.copyfileobj(image.file, buffer)
+        
+        image_path_str = f"uploads/{saved_filename}"
+
     cursor.execute("""
         INSERT INTO complaints 
-        (ticket_id, student_id, student_name, roll_number, title, category, location, urgency, description, status, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Submitted', ?, ?)
-    """, (ticket_id, complaint.student_id, complaint.student_name, complaint.roll_number, complaint.title, 
-          complaint.category, complaint.location, complaint.urgency, complaint.description, now, now))
+        (ticket_id, student_id, student_name, roll_number, title, category, location, urgency, description, image_path, status, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Submitted', ?, ?)
+    """, (ticket_id, student_id, student_name, roll_number, title, 
+          category, location, urgency, description, image_path_str, now, now))
     
     complaint_id = cursor.lastrowid
 
     cursor.execute("""
         INSERT INTO complaint_history (complaint_id, status_from, status_to, updated_by_role, updated_by_name, comments)
-        VALUES (?, NULL, 'Submitted', 'Student', ?, 'Complaint submitted by student.')
-    """, (complaint_id, complaint.student_name))
+        VALUES (?, NULL, 'Submitted', 'Student', ?, 'Complaint submitted with issue details.')
+    """, (complaint_id, student_name))
 
     conn.commit()
     conn.close()
@@ -52,7 +69,8 @@ def submit_complaint(complaint: ComplaintCreate):
     return {
         "success": True,
         "message": "Complaint submitted successfully!",
-        "ticket_id": ticket_id
+        "ticket_id": ticket_id,
+        "image_path": image_path_str
     }
 
 @router.get("/student/{student_id}")

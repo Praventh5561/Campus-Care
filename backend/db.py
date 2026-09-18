@@ -44,7 +44,7 @@ def init_db():
     );
     """)
 
-    # Complaints Table
+    # Complaints Table (With image_path support)
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS complaints (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,6 +57,7 @@ def init_db():
         location TEXT NOT NULL,
         urgency TEXT DEFAULT 'Medium',
         description TEXT NOT NULL,
+        image_path TEXT DEFAULT '',
         status TEXT DEFAULT 'Submitted',
         assigned_staff TEXT DEFAULT 'Unassigned',
         staff_remarks TEXT DEFAULT '',
@@ -65,6 +66,12 @@ def init_db():
         FOREIGN KEY (student_id) REFERENCES students(id)
     );
     """)
+
+    # Check if image_path column exists (for existing DB migration)
+    cursor.execute("PRAGMA table_info(complaints)")
+    columns = [col[1] for col in cursor.fetchall()]
+    if "image_path" not in columns:
+        cursor.execute("ALTER TABLE complaints ADD COLUMN image_path TEXT DEFAULT ''")
 
     # Complaint History Logs
     cursor.execute("""
@@ -104,10 +111,10 @@ def init_db():
     cursor.execute("SELECT COUNT(*) FROM complaints")
     if cursor.fetchone()[0] == 0:
         sample_complaints = [
-            ('CC22-2026-8941', 1, 'Arun V', '21CS045', 'Lab 3 Projector Defective', 'Infrastructure & Furniture', 'Main Block - CS Lab 3', 'High', 'The main ceiling projector flickers constantly during lectures.', 'Under Review', 'Priya Sharma', 'Technician assigned for hardware inspection.'),
-            ('CC22-2026-3109', 2, 'Sneha R', '22EC012', 'Hostel Block B Hot Water Outage', 'Hostel & Accommodation', 'Hostel B - 3rd Floor', 'Emergency', 'Solar heater supply pipe leaking, no warm water since morning.', 'Submitted', 'Unassigned', 'Awaiting staff allocation.')
+            ('CC22-2026-8941', 1, 'Arun V', '21CS045', 'Lab 3 Projector Defective', 'Infrastructure & Furniture', 'Main Block - CS Lab 3', 'High', 'The main ceiling projector flickers constantly during lectures.', '', 'Under Review', 'Priya Sharma', 'Technician assigned for hardware inspection.'),
+            ('CC22-2026-3109', 2, 'Sneha R', '22EC012', 'Hostel Block B Hot Water Outage', 'Hostel & Accommodation', 'Hostel B - 3rd Floor', 'Emergency', 'Solar heater supply pipe leaking, no warm water since morning.', '', 'Submitted', 'Unassigned', 'Awaiting staff allocation.')
         ]
-        cursor.executemany("INSERT INTO complaints (ticket_id, student_id, student_name, roll_number, title, category, location, urgency, description, status, assigned_staff, staff_remarks) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", sample_complaints)
+        cursor.executemany("INSERT INTO complaints (ticket_id, student_id, student_name, roll_number, title, category, location, urgency, description, image_path, status, assigned_staff, staff_remarks) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", sample_complaints)
 
         cursor.execute("INSERT INTO complaint_history (complaint_id, status_from, status_to, updated_by_role, updated_by_name, comments) VALUES (1, 'Submitted', 'Under Review', 'Staff', 'Priya Sharma', 'Assigned technician to inspect Lab 3 projector hardware.')")
 
