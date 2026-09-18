@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Complaints | CampusScan</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="student-dashboard.html" class="logo">CampusScan<span class="dot">.</span></a>
+  <div class="nav-links">
+    <a href="student-dashboard.html">Dashboard</a>
+    <a href="complaint.html">File Complaint</a>
+    <a href="#" class="logout-btn">Logout</a>
+  </div>
+</nav>
+
+<main class="main-content" style="max-width:900px;margin:0 auto;">
+  <h1 class="page-title">My Complaints</h1>
+  <p class="page-subtitle">Track the status of every complaint you've filed</p>
+
+  <div class="filters">
+    <select id="statusFilter">
+      <option value="all">All Statuses</option>
+      <option value="Pending">Pending</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Resolved">Resolved</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+  </div>
+
+  <div id="statusList"></div>
+</main>
+
+<script src="js/script.js"></script>
+</body>
+</html>

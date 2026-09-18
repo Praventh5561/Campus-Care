@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Login | CampusScan</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="logo">CampusScan<span class="dot">.</span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="staff-login.html">Staff Login</a>
+  </div>
+</nav>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-icon">🎓</div>
+    <h2>Student Portal</h2>
+    <p class="subtitle">Access CampusScan to report and track campus issues</p>
+
+    <div class="role-toggle">
+      <a href="#" id="loginTabBtn" class="active">Login</a>
+      <a href="#" id="registerTabBtn">Register</a>
+    </div>
+
+    <!-- LOGIN PANE -->
+    <div id="loginPane">
+      <div id="loginAlert" class="alert alert-error"></div>
+      <form id="studentLoginForm">
+        <div class="form-group">
+          <label for="email">College Email</label>
+          <input type="email" id="email" placeholder="you@campus.edu" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+      </form>
+      <p class="form-footer-text">Demo login: arun.student@campus.edu / password123</p>
+    </div>
+
+    <!-- REGISTER PANE -->
+    <div id="registerPane" style="display:none;">
+      <div id="registerAlert" class="alert alert-error"></div>
+      <form id="studentRegisterForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg_no">Register Number</label>
+            <input type="text" id="reg_no" placeholder="CS21001" required>
+          </div>
+          <div class="form-group">
+            <label for="year">Year</label>
+            <select id="year">
+              <option value="1">1st Year</option>
+              <option value="2">2nd Year</option>
+              <option value="3">3rd Year</option>
+              <option value="4">4th Year</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" placeholder="Your full name" required>
+        </div>
+        <div class="form-group">
+          <label for="department">Department</label>
+          <input type="text" id="department" placeholder="Computer Science" required>
+        </div>
+        <div class="form-group">
+          <label for="reg_email">College Email</label>
+          <input type="email" id="reg_email" placeholder="you@campus.edu" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" placeholder="9876543210">
+        </div>
+        <div class="form-group">
+          <label for="reg_password">Password</label>
+          <input type="password" id="reg_password" placeholder="Create a password" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
