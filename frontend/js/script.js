@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CampusCare22 - Frontend Logic & API Integration
+   CampusCare22 - Frontend Logic & API Integration with Image Upload Support
    ========================================================================== */
 
 const API_BASE = "http://127.0.0.1:8000/api";
@@ -171,6 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Complaint Form Submission with FormData & File Attachment
     const complaintForm = document.getElementById("complaintForm");
     if (complaintForm) {
         const studentUser = checkAuth("student");
@@ -182,22 +183,25 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
             if (!studentUser) return;
 
-            const payload = {
-                student_id: studentUser.id,
-                student_name: studentUser.name,
-                roll_number: studentUser.roll_number,
-                title: document.getElementById("title").value,
-                category: document.getElementById("category").value,
-                location: document.getElementById("location").value,
-                urgency: document.getElementById("urgency").value,
-                description: document.getElementById("description").value
-            };
+            const formData = new FormData();
+            formData.append("student_id", studentUser.id);
+            formData.append("student_name", studentUser.name);
+            formData.append("roll_number", studentUser.roll_number);
+            formData.append("title", document.getElementById("title").value);
+            formData.append("category", document.getElementById("category").value);
+            formData.append("location", document.getElementById("location").value);
+            formData.append("urgency", document.getElementById("urgency").value);
+            formData.append("description", document.getElementById("description").value);
+
+            const fileInput = document.getElementById("image_file");
+            if (fileInput && fileInput.files[0]) {
+                formData.append("image", fileInput.files[0]);
+            }
 
             try {
                 const res = await fetch(`${API_BASE}/complaints/submit`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
+                    body: formData
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
@@ -258,7 +262,10 @@ async function loadStudentDashboard(studentId) {
         tableBody.innerHTML = complaints.map(c => `
             <tr>
                 <td><strong><a href="status.html?ticket=${c.ticket_id}">${c.ticket_id}</a></strong></td>
-                <td>${c.title}</td>
+                <td>
+                    ${c.title}
+                    ${c.image_path ? '<span style="font-size:0.75rem; background:rgba(99,102,241,0.2); color:#a5b4fc; padding:2px 6px; border-radius:4px; margin-left:6px;">📷 Photo</span>' : ''}
+                </td>
                 <td>${c.category}</td>
                 <td>${getUrgencyBadge(c.urgency)}</td>
                 <td>${getStatusBadge(c.status)}</td>
@@ -319,7 +326,10 @@ async function fetchStaffComplaints() {
             <tr>
                 <td><strong><a href="status.html?ticket=${c.ticket_id}">${c.ticket_id}</a></strong></td>
                 <td>${c.student_name} (${c.roll_number})</td>
-                <td>${c.title}</td>
+                <td>
+                    ${c.title}
+                    ${c.image_path ? '<span style="font-size:0.75rem; background:rgba(99,102,241,0.2); color:#a5b4fc; padding:2px 6px; border-radius:4px; margin-left:6px;">📷 Photo</span>' : ''}
+                </td>
                 <td><small>${c.category}<br><span style="color:var(--text-dim);">${c.location}</span></small></td>
                 <td>${getUrgencyBadge(c.urgency)}</td>
                 <td>${getStatusBadge(c.status)}</td>
@@ -365,6 +375,22 @@ async function fetchTicketDetails(ticketId) {
         document.getElementById("ticketDesc").innerText = c.description;
         document.getElementById("ticketAssigned").innerText = c.assigned_staff || "Awaiting Staff Assignment";
         document.getElementById("ticketRemarks").innerText = c.staff_remarks || "No remarks added yet.";
+
+        // Display Photo Preview if present
+        const imgContainer = document.getElementById("ticketImagePreview");
+        if (imgContainer) {
+            if (c.image_path) {
+                imgContainer.innerHTML = `
+                    <small style="color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Attached Photo Evidence</small><br>
+                    <a href="${c.image_path}" target="_blank">
+                        <img src="${c.image_path}" alt="Issue Photo" style="max-width: 100%; max-height: 250px; border-radius: var(--radius-md); border: 1px solid var(--border-glass-light); margin-top: 0.5rem; object-fit: cover;">
+                    </a>
+                `;
+                imgContainer.style.display = "block";
+            } else {
+                imgContainer.style.display = "none";
+            }
+        }
 
         const history = c.history || [];
         const timelineEl = document.getElementById("ticketTimeline");
