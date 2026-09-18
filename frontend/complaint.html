@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File a Complaint - CampusCare22</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="brand">
+            <div class="brand-icon">🏥</div>
+            <span>Campus<span style="color: var(--primary);">Care22</span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="student-dashboard.html" class="nav-link">Dashboard</a></li>
+            <li><a href="complaint.html" class="nav-link active">Lodge Complaint</a></li>
+            <li><a href="status.html" class="nav-link">Track Ticket</a></li>
+        </ul>
+        <div id="userNavInfo"></div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div style="max-width: 650px; margin: 1rem auto;">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <span style="font-size: 2.2rem;">📝</span>
+                    <div>
+                        <h2>Lodge Campus Grievance</h2>
+                        <p style="font-size: 0.88rem; color: var(--text-muted);">Fill in the issue details. A unique tracking ID will be generated upon submission.</p>
+                    </div>
+                </div>
+
+                <div id="formAlert" class="alert"></div>
+
+                <form id="complaintForm">
+                    <div class="form-group">
+                        <label class="form-label">Student Name & Roll Number</label>
+                        <input type="text" id="student_name_disp" class="form-control" readonly style="background: rgba(255,255,255,0.05); color: var(--text-muted);">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Complaint Title / Subject</label>
+                        <input type="text" id="title" class="form-control" placeholder="e.g. Lab 3 Projector Defective / Washroom Tap Leaking" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select id="category" class="form-control" required>
+                            <option value="Infrastructure & Furniture">Infrastructure & Furniture</option>
+                            <option value="Hostel & Accommodation">Hostel & Accommodation</option>
+                            <option value="Wi-Fi & IT Services">Wi-Fi & IT Services</option>
+                            <option value="Academics & Library">Academics & Library</option>
+                            <option value="Electrical & AC">Electrical & AC</option>
+                            <option value="Sanitation & Hygiene">Sanitation & Hygiene</option>
+                            <option value="Canteen & Food Quality">Canteen & Food Quality</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Exact Location / Room Number / Block</label>
+                        <input type="text" id="location" class="form-control" placeholder="e.g. Main Block CS Lab 3 / Hostel B Room 304" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Urgency Level</label>
+                        <select id="urgency" class="form-control" required>
+                            <option value="Low">Low - Standard issue, can wait a few days</option>
+                            <option value="Medium" selected>Medium - Normal priority, needs attention soon</option>
+                            <option value="High">High - Impairing daily lectures or living condition</option>
+                            <option value="Emergency">Emergency - Immediate hazard / severe pipe burst / power cut</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Detailed Description of the Issue</label>
+                        <textarea id="description" class="form-control" rows="4" placeholder="Describe what happened, specific equipment details, time observed..." required></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <a href="student-dashboard.html" class="btn btn-secondary" style="flex:1;">Cancel</a>
+                        <button type="submit" class="btn btn-primary" style="flex:2;">🚀 Submit Complaint</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 CampusCare22 - Complaint Submission</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

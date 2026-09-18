@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - CampusCare22</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="brand">
+            <div class="brand-icon">🏥</div>
+            <span>Campus<span style="color: var(--primary);">Care22</span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="student-dashboard.html" class="nav-link active">Dashboard</a></li>
+            <li><a href="complaint.html" class="nav-link">Lodge Complaint</a></li>
+            <li><a href="status.html" class="nav-link">Track Ticket</a></li>
+        </ul>
+        <div id="userNavInfo"></div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <h2>Student Grievance Dashboard</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">View submitted issues, track resolution state, or lodge new grievances.</p>
+            </div>
+            <a href="complaint.html" class="btn btn-primary">➕ Lodge New Complaint</a>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-icon total">📋</div>
+                <div class="stat-info">
+                    <h4 id="myTotalCount">0</h4>
+                    <p>My Total Tickets</p>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon pending">⏳</div>
+                <div class="stat-info">
+                    <h4 id="myPendingCount">0</h4>
+                    <p>Pending / In Review</p>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon resolved">✅</div>
+                <div class="stat-info">
+                    <h4 id="myResolvedCount">0</h4>
+                    <p>Resolved Complaints</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Complaints Table -->
+        <div class="glass-card">
+            <h3 style="margin-bottom: 1rem;">My Grievance Log</h3>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Subject / Title</th>
+                            <th>Category</th>
+                            <th>Urgency</th>
+                            <th>Current Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentComplaintsTable">
+                        <!-- Loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 CampusCare22 - Student Portal</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
