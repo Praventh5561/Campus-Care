@@ -1,6 +1,18 @@
-# 🎓 CAMPUSCARE22 - College Grievance & Issue Management System
+<div align="center">
 
-**CAMPUSCARE22** is a modern, full-stack college complaint and issue tracking web application built with a Python FastAPI backend, SQLite/MySQL database, and a glassmorphism web interface.
+  <h1>🎓 CAMPUSCARE22</h1>
+  <p><strong>College Grievance & Maintenance Issue Tracking System</strong></p>
+
+  <!-- Quick GitHub Badges (Shields.io) -->
+  <p>
+    <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python Version" /></a>
+    <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/FastAPI-0.100%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" /></a>
+    <a href="https://sqlite.org"><img src="https://img.shields.io/badge/SQLite-Embedded%20DB-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" /></a>
+    <a href="https://github.com/Praventh5561/Campus-Care/pulls"><img src="https://img.shields.io/badge/PRs-Welcome-brightgreen.svg?style=for-the-badge" alt="PRs Welcome" /></a>
+    <a href="https://github.com/Praventh5561/Campus-Care/stargazers"><img src="https://img.shields.io/badge/⭐%20Stars-Appreciate-yellow?style=for-the-badge" alt="Stars" /></a>
+  </p>
+
+</div>
 
 ---
 
@@ -42,20 +54,17 @@ CAMPUSCARE22/
 ## 🚀 How to Run CAMPUSCARE22
 
 ### 1. Install Dependencies
-Open terminal in `CAMPUSCARE22`:
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 2. Generate PowerPoint Presentation (.pptx)
-Run the presentation generator script:
 ```bash
 python generate_ppt.py
 ```
 This produces `CampusCare22_Presentation.pptx`.
 
 ### 3. Start Python Backend & Web Server
-Run the FastAPI server:
 ```bash
 python -m uvicorn backend.server:app --reload --port 8000
 ```
