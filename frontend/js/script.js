@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CampusCare22 - Frontend Logic with PBKDF2 Token Authentication & File Uploads
+   CampusCare22 - Real-Time Dashboard, AI Routing & PBKDF2 Auth Client
    ========================================================================== */
 
 const API_BASE = "http://127.0.0.1:8000/api";
@@ -76,7 +76,7 @@ function getUrgencyBadge(urgency) {
         case "High":
             return `<span class="badge badge-high">High</span>`;
         case "Emergency":
-            return `<span class="badge badge-emergency">Emergency</span>`;
+            return `<span class="badge badge-emergency">Emergency ⚡</span>`;
         default:
             return `<span class="badge badge-medium">${urgency}</span>`;
     }
@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
         userNav.innerHTML = `
             <span style="color: var(--text-muted); font-size: 0.9rem; margin-right: 0.5rem;">
                 👋 Welcome, <strong>${user.name}</strong> (${user.role.toUpperCase()})
+                <span title="Live Real-time Sync Active" style="display:inline-block; width:8px; height:8px; background:#10b981; border-radius:50%; margin-left:6px; animation: pulse 2s infinite;"></span>
             </span>
             <button onclick="logout()" class="btn btn-secondary btn-sm">Logout</button>
         `;
@@ -211,7 +212,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
-                    alert(`🎉 Complaint Registered! Ticket ID: ${data.ticket_id}`);
+                    let alertMsg = `🎉 Complaint Registered! Ticket ID: ${data.ticket_id}`;
+                    if (data.urgency === "Emergency") alertMsg += "\n⚡ AI System Escalated Urgency to EMERGENCY!";
+                    alert(alertMsg);
                     window.location.href = `status.html?ticket=${data.ticket_id}`;
                 } else {
                     showAlert("formAlert", data.detail || "Submission failed.", "error");
@@ -222,17 +225,23 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Real-Time Polling setup for Student Dashboard
     if (document.getElementById("studentComplaintsTable")) {
         const studentUser = checkAuth("student");
         if (studentUser) {
             loadStudentDashboard(studentUser.id);
+            // Real-Time Auto Refresh every 15 seconds
+            setInterval(() => loadStudentDashboard(studentUser.id), 15000);
         }
     }
 
+    // Real-Time Polling setup for Staff Control Center
     if (document.getElementById("staffComplaintsTable")) {
         const staffUser = checkAuth("staff");
         if (staffUser) {
             loadStaffDashboard();
+            // Real-Time Auto Refresh every 15 seconds
+            setInterval(() => loadStaffDashboard(), 15000);
         }
     }
 
